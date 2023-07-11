@@ -32,9 +32,9 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: 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
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                    # Needed to get PR information, if any
-          SONAR_TOKEN: 98143b4278256ac04a640a3598d65cdb71fc84c3
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   deploy:
     needs: Build
     runs-on: ubuntu-latest
