@@ -22,6 +22,19 @@ jobs:
         with: 
           name: TempArtifact
           path: force-app/
+  SonarScan:
+    name: SonarCloud
+    runs-on: ubuntu-lates
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: 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
+                   # Needed to get PR information, if any
+          SONAR_TOKEN: 98143b4278256ac04a640a3598d65cdb71fc84c3
   deploy:
     needs: Build
     runs-on: ubuntu-latest
