@@ -23,7 +23,8 @@ jobs:
           name: TempArtifact
           path: force-app/
   SonarScan:
-    name: SonarCloud
+    needs: Build
+    name: SonarCloud    
     runs-on: ubuntu-lates
     steps:
       - uses: actions/checkout@v3
