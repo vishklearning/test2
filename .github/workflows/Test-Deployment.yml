@@ -1,7 +1,7 @@
 name: Test Wrokflow With Deployment
 on:
   push:
-    branches: [master]
+    branches: [master1]
   pull_request:
     branches: [master]
   workflow_dispatch:
@@ -17,6 +17,20 @@ jobs:
           node-version: "14"
       - name: Install SFDX CLI
         run: npm install sfdx-cli --global
+     # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+      - name: 'Installing sfdx git delta'
+        run: | 
+             echo y | sfdx plugins:install sfdx-git-delta
+             sfdx plugins 
+      - name: 'Get all test files in repo'
+        run: |
+              node ./parseAllTests.js              
+              ALLTESTS=$(cat testsAll.txt)       
+              echo "APEX_TESTS_ALL=$ALLTESTS" >> $GITHUB_ENV
+      - name: 'Create delta packages for new, modified or deleted metadata'
+        run: | 
+            mkdir changed-sources
+            sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
       - name: upload artiface
         uses: actions/upload-artifact@v3.1.2
         with: 
