@@ -31,7 +31,7 @@ jobs:
       - name: 'Create delta packages for new, modified or deleted metadata'
         run: | 
             mkdir changed-sources
-            sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
+            sfdx sgd:source:delta --to "HEAD" --from $(git merge-base HEAD origin/main) --output changed-sources/ --generate-delta --source force-app/
       - name: upload artiface
         uses: actions/upload-artifact@v3.1.2
         with: 
