@@ -1,0 +1,46 @@
+name: Test Wrokflow With Deployment
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+jobs: 
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14"
+      - name: Install SFDX CLI
+        run: npm install sfdx-cli --global
+      - name: upload artiface
+        uses: actions/upload-artifact@v3.1.2
+        with: 
+          name: TempArtifact
+          path: force-app/
+  SonarScan:
+    needs: Build
+    name: SonarCloud    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+                   # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+      - name: Output content
+        run: ls
