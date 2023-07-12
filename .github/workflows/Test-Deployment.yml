@@ -27,6 +27,7 @@ jobs:
               node ./parseAllTests.js              
               ALLTESTS=$(cat testsAll.txt)       
               echo "APEX_TESTS_ALL=$ALLTESTS" >> $GITHUB_ENV
+              echo ${{ github.event.pull_request.head.sha }}
       - name: 'Create delta packages for new, modified or deleted metadata'
         run: | 
             mkdir changed-sources
