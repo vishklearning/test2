@@ -71,6 +71,8 @@ jobs:
         run: | 
              echo y | sfdx plugins:install sfdx-git-delta
              sfdx plugins 
+      - name: 'force logout'
+        run: sfdx force:auth:logout --all --noprompt
       - name: Populate auth file with SFDX_URL secret of target org
         run: |
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
