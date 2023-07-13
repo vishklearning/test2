@@ -76,6 +76,7 @@ jobs:
       - name: Populate auth file with SFDX_URL secret of target org
         run: |
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
+          echo ${{ secrets.Dev_URL}}
       - name: Get Auth URL
         run: |
              echo sfdx force:org:display -u MyAliasName --verbose
