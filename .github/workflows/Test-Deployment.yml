@@ -28,6 +28,9 @@ jobs:
               ALLTESTS=$(cat testsAll.txt)       
               echo "APEX_TESTS_ALL=$ALLTESTS" >> $GITHUB_ENV
               echo ${{ github.event.push.head.sha }}
+      - name: Check APEX
+        uses: legetz/setup-pmd@v6.48
+      - run: pmd --dir ./force-app/classes -R category/apex/design.xml      
       - name: 'Create delta packages for new, modified or deleted metadata'
         run: | 
             mkdir changed-sources
