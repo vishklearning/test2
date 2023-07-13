@@ -60,6 +60,17 @@ jobs:
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install SFDX CLI
+        run: npm install sfdx-cli --global
+      # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+      - name: 'Installing sfdx git delta'
+        run: | 
+             echo y | sfdx plugins:install sfdx-git-delta
+             sfdx plugins 
       - name: Populate auth file with SFDX_URL secret of target org
         run: |
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
