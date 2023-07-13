@@ -78,8 +78,7 @@ jobs:
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
           echo ${{ secrets.Dev_URL}}
       - name: Get Auth URL
-        run: |
-             echo sfdx force:org:display -u MyAliasName --verbose
+        run:  sfdx force:org:display -u MyAliasName --verbose
       - name: Authenticate to target Org
         run: sfdx auth:sfdxurl:store -f ./Dev_URL.txt -s -a targetOrg
       - name: Deployment - run all tests
