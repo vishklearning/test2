@@ -30,7 +30,7 @@ jobs:
               echo ${{ github.event.push.head.sha }}
       - name: Check APEX
         uses: legetz/setup-pmd@v6.48
-      - run: pmd --dir ./force-app/classes -R category/apex/design.xml      
+      - run: pmd --dir ./force-app/main/default/classes -R category/apex/design.xml      
       - name: 'Create delta packages for new, modified or deleted metadata'
         run: | 
             mkdir changed-sources
