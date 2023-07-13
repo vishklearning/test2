@@ -60,5 +60,11 @@ jobs:
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v3
-      - name: Output content
-        run: ls
+      - name: Populate auth file with SFDX_URL secret of target org
+        run: |
+          echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
+      - name: Authenticate to target Org
+        run: sfdx auth:sfdxurl:store -f ./Dev_URL.txt -s -a targetOrg
+      - name: Deployment - run all tests
+        run: >
+          sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json
