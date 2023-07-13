@@ -77,8 +77,9 @@ jobs:
         run: |
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
           echo ${{ secrets.Dev_URL}}
-     # - name: Get Auth URL
-     #   run:  sfdx force:org:display -u MyAliasName --verbose
+      - name: Get Auth URL
+        run:  sfdx auth:web:login -a vishksalesforcee@myorg.sandbox --instanceurl=https://computing-efficiency-483.scratch.my.salesforce.com
+        # sfdx force:org:display -u MyAliasName --verbose
       - name: Authenticate to target Org
         run: sfdx auth:sfdxurl:store -f ./Dev_URL.txt -s -a targetOrg
       - name: Deployment - run all tests
