@@ -25,12 +25,6 @@ jobs:
         run: | 
              echo y | sfdx plugins:install sfdx-git-delta
              sfdx plugins 
-      - name: 'Get all test files in repo'
-        run: |
-              node ./parseAllTests.js              
-              ALLTESTS=$(cat testsAll.txt)       
-              echo "APEX_TESTS_ALL=$ALLTESTS" >> $GITHUB_ENV
-              echo ${{ github.event.push.head.sha }}
       - name: Check APEX
         uses: legetz/setup-pmd@v6.48
       - run: pmd --dir ./force-app/main/default/classes -R category/apex/design.xml      
