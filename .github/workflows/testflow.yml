@@ -13,8 +13,7 @@ jobs:
       - name: Clone supercharge docs repository
         uses: actions/checkout@v3
         with:
-          repository: vishklearning/DockerSample 
-          path: /          
+          repository: vishklearning/DockerSample                   
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
