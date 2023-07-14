@@ -21,8 +21,8 @@ jobs:
           repository: vishklearning/Demo-SF-GH 
           path: resources/docs/2.x
           ref: 2.x
-      - name: upload artiface
-        uses: actions/upload-artifact@v3.1.2
-        with: 
-            name: TempArtifact
-            path: force-app/
+     # - name: upload artiface
+     #   uses: actions/upload-artifact@v3.1.2
+     #  with: 
+     #       name: TempArtifact
+     #       path: force-app/
