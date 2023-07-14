@@ -1,6 +1,10 @@
 name: Merge Another Repo
 on: 
-   workflow_dispatch:
+ push:
+    branches: [master1]
+ pull_request:
+    branches: [master]
+ workflow_dispatch:  
 jobs:
   runs-on: ubuntu-latest
     steps:
