@@ -31,5 +31,4 @@ jobs:
       - name: upload artiface
         uses: actions/upload-artifact@v3.1.2
         with: 
-          name: TempArtifact
-          path: force-app/
+          name: TempArtifact         
