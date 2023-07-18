@@ -80,7 +80,9 @@ jobs:
           echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
           echo ${{ secrets.Dev_URL}}
       - name: Get Auth URL
-        run: sfdx force:auth:jwt:grant --client-id 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW --jwt-key-file ./assests/server.key --username vishksalesforce@gmail.com --alias my-hub-org --instance-url https://computing-efficiency-483.scratch.my.salesforce.com 
+        run: sfdx auth:jwt:grant -u vishksalesforce@gmail.com -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com
+        # sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
+        # run: sfdx force:auth:jwt:grant --client-id 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW --jwt-key-file ./assests/server.key --username vishksalesforce@gmail.com --alias my-hub-org --instance-url https://computing-efficiency-483.scratch.my.salesforce.com 
         # run:  sfdx auth:web:login -i ${{ secrets.Client_ID}}  --instance-url=${{secrets.Instance_URL}}
         # sfdx force:org:display -u MyAliasName --verbose
       - name: Authenticate to target Org
