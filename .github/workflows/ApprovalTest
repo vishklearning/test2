@@ -1,4 +1,3 @@
-# Welcome Vishwanath Karalapati
 name: CICD APproval Test
 on:
   push:
