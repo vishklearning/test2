@@ -1,13 +1,11 @@
 # Welcome Vishwanath Karalapati
 name: CICD APproval Test
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   Build:
     runs-on: ubuntu-latest
