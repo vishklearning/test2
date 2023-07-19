@@ -1,5 +1,9 @@
 name: CICD APproval Test
-on: 
+on:
+  push:
+    branches: [Develop]
+  pull_request:
+    branches: [Develop]
   workflow_dispatch:
 jobs:
   Build:
