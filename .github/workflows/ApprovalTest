@@ -1,5 +1,5 @@
 # Welcome Vishwanath Karalapati
-name: CI + CD
+name: CICD APproval Test
 
 on:
   push:
