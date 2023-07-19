@@ -88,26 +88,90 @@ jobs:
          run: >
           sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json! 
     
-  DeployStaging:
-    name: Deploy to Staging 
-    if: github.event.ref == 'refs/heads/main'
+  DeployQA:
+    name: Deploy to QA 
+   # if: github.event.ref == 'refs/heads/main'
     needs: [Build]
     runs-on: ubuntu-latest
     environment: 
-      name: Staging
-      url: 'http://test.myapp.com'
+      name: Develop
+      url: 'http://dev.myapp.com'
     steps:
-      - name: Deploy
-        run: echo I am deploying! 
+       - name: Checkout
+         uses: actions/checkout@v3
+       - name: Download Artifact
+         uses: actions/download-artifact@v3
+       - name: Setup Node
+         uses: actions/setup-node@v3
+         with:
+          node-version: "18"
+       - name: Install SFDX CLI
+         run: npm install sfdx-cli --global
+      # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+       - name: 'Installing sfdx git delta'
+         run: | 
+             echo y | sfdx plugins:install sfdx-git-delta
+             sfdx plugins 
+       - name: 'force logout'
+         run: sfdx force:auth:logout --all --noprompt
+       - name: Populate auth file with SFDX_URL secret of target org
+         run: |
+          echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
+          echo ${{ secrets.Dev_URL}}
+       - name: Authticate the URL
+         run: sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com
+        # sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
+        # run: sfdx force:auth:jwt:grant --client-id 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW --jwt-key-file ./assests/server.key --username vishksalesforce@gmail.com.dev1 --alias my-hub-org --instance-url https://computing-efficiency-483.scratch.my.salesforce.com 
+        # run:  sfdx auth:web:login -i ${{ secrets.Client_ID}}  --instance-url=${{secrets.Instance_URL}}
+        # sfdx force:org:display -u MyAliasName --verbose
+   #   - name: List of Authenticated Orgs
+   #     run: sfdx org list
+   #   - name: Authenticate to target Org
+   #     run: sfdx auth:sfdxurl:store -f ./Dev_URL.txt -s -a targetOrg
+       - name: Deployment - run all tests
+         run: >
+          sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json!  
             
   DeployProd:
     name: Deploy to Production 
-    needs: [DeployStaging]
+    needs: [DeployQA]
     runs-on: ubuntu-latest
     environment: 
-      name: Production
+      name: Prod
       url: 'http://www.myapp.com'
     steps:
-      - name: Deploy
-        run: echo I am deploying! 
+       - name: Checkout
+         uses: actions/checkout@v3
+       - name: Download Artifact
+         uses: actions/download-artifact@v3
+       - name: Setup Node
+         uses: actions/setup-node@v3
+         with:
+          node-version: "18"
+       - name: Install SFDX CLI
+         run: npm install sfdx-cli --global
+      # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+       - name: 'Installing sfdx git delta'
+         run: | 
+             echo y | sfdx plugins:install sfdx-git-delta
+             sfdx plugins 
+       - name: 'force logout'
+         run: sfdx force:auth:logout --all --noprompt
+       - name: Populate auth file with SFDX_URL secret of target org
+         run: |
+          echo ${{ secrets.Dev_URL}} > ./Dev_URL.txt
+          echo ${{ secrets.Dev_URL}}
+       - name: Authticate the URL
+         run: sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com
+        # sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
+        # run: sfdx force:auth:jwt:grant --client-id 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW --jwt-key-file ./assests/server.key --username vishksalesforce@gmail.com.dev1 --alias my-hub-org --instance-url https://computing-efficiency-483.scratch.my.salesforce.com 
+        # run:  sfdx auth:web:login -i ${{ secrets.Client_ID}}  --instance-url=${{secrets.Instance_URL}}
+        # sfdx force:org:display -u MyAliasName --verbose
+   #   - name: List of Authenticated Orgs
+   #     run: sfdx org list
+   #   - name: Authenticate to target Org
+   #     run: sfdx auth:sfdxurl:store -f ./Dev_URL.txt -s -a targetOrg
+       - name: Deployment - run all tests
+         run: >
+          sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json! 
     
