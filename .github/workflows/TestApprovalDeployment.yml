@@ -1,5 +1,5 @@
 # Welcome Vishwanath Karalapati
-name: CI + CD
+name: Approval Deployment
 
 on:
   push:
@@ -12,10 +12,37 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Compile
-        run: echo Hello, world!
+     - name: Checkout
+       uses: actions/checkout@v3
+     - name: Setup Node
+       uses: actions/setup-node@v3
+       with:
+          node-version: "18"
+     - name: Install SFDX CLI
+       run: npm install sfdx-cli --global
+      # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+     - name: 'Installing sfdx git delta'
+       run: | 
+             echo y | sfdx plugins:install sfdx-git-delta
+             sfdx plugins 
+     - name: 'Get all test files in repo'
+       run: |
+              node ./parseAllTests.js              
+              ALLTESTS=$(cat testsAll.txt)       
+              echo "APEX_TESTS_ALL=$ALLTESTS" >> $GITHUB_ENV
+              echo ${{ github.event.push.head.sha }}
+     - name: Check APEX
+       uses: legetz/setup-pmd@v6.48
+     - run: pmd --dir ./force-app/main/default/classes -R category/apex/design.xml      
+     - name: 'Create delta packages for new, modified or deleted metadata'
+       run: | 
+            mkdir changed-sources
+            sfdx sgd:source:delta --to "HEAD" --from $(git merge-base HEAD origin/main) --output changed-sources/ --generate-delta --source force-app/
+     - name: upload artiface
+       uses: actions/upload-artifact@v3.1.2
+       with: 
+          name: TempArtifact
+          path: force-app/
     
   DeployDev:
     name: Deploy to Dev 
