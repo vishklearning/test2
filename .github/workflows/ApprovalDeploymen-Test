@@ -1,11 +1,10 @@
 name: ApprovalDeployment
 on:
   push:
-    branches:[Develop]
+    branches: [main]
   pull_request:
-    branches:[Develop]
+    branches: [main]
   workflow_dispatch:
-
 jobs:
  Build:
   runs-on: ubuntu-latest
