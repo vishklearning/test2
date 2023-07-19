@@ -35,7 +35,7 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-latest
     environment: 
-      name: Staging
+      name: QA
       url: 'http://test.myapp.com'
     steps:
       - name: Deploy
@@ -43,10 +43,10 @@ jobs:
             
   DeployProd:
     name: Deploy to Production 
-    needs: [DeployStaging]
+    needs: [QA]
     runs-on: ubuntu-latest
     environment: 
-      name: Production
+      name: Prod
       url: 'http://www.myapp.com'
     steps:
       - name: Deploy
