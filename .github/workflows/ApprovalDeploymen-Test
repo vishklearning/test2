@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Compile
         run: echo Hello, world!
     
@@ -35,7 +34,7 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-latest
     environment: 
-      name: QA
+      name: Staging
       url: 'http://test.myapp.com'
     steps:
       - name: Deploy
@@ -43,12 +42,11 @@ jobs:
             
   DeployProd:
     name: Deploy to Production 
-    needs: [QA]
+    needs: [DeployStaging]
     runs-on: ubuntu-latest
     environment: 
-      name: Prod
+      name: Production
       url: 'http://www.myapp.com'
     steps:
       - name: Deploy
-        run: echo I am deploying! 
-    
+        run: echo I am deploying!  
