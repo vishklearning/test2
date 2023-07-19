@@ -1,7 +1,7 @@
 name: ApprovalDeployment
 on:
   push:
-    branches:[main]
+    branches:[Develop]
   pull_request
-    branches:[main]
+    branches:[Develop]
   workflow_dispatch
