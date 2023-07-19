@@ -1,4 +1,4 @@
-name: Test Approval Deployment
+name: Approval Deployment
 on:
   workflow_dispatch:
 jobs: 
