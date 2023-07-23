@@ -38,7 +38,7 @@ jobs:
       - name: upload artiface
         uses: actions/upload-artifact@v3.1.2
         with: 
-          name: TempArtifact
+          name: TempArtifact + $(date +'%Y-%m-%dT%H:%M:%S')
           path: force-app/
   SonarScan:
     needs: Build
