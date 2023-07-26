@@ -65,7 +65,13 @@ jobs:
         if: always()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Overwrote title in ${workflow_link}`}"
+          # overwrite: "{title: `Overwrote title in ${workflow_link}`}"
+          raw: >-
+            {
+              "@type": "MessageCard",
+              "@context": "${workflow_link}",
+              "title": "No ${variables} avaliable in here"
+            }
   deploy:
     needs: Build
     runs-on: ubuntu-latest
