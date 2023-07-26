@@ -108,7 +108,7 @@ jobs:
         run: >
           sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json
   TeamsNotificationPostDeployment:
-    needs: deploy
+    needs: Build
     name: Teams Notification Post Deployment
     runs-on: ubuntu-latest
     steps:
