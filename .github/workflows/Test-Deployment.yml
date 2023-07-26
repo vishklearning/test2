@@ -65,7 +65,10 @@ jobs:
         if: always()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Overwrote title in ${workflow_link}`}"
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          dry_run: True       
   deploy:
     needs: Build
     runs-on: ubuntu-latest
