@@ -64,8 +64,7 @@ jobs:
         uses: skitionek/notify-microsoft-teams@master
         if: always()
         with:
-          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          # overwrite: "{title: `Overwrote title in ${workflow_link}`}"
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}          
           raw: >-
             {
               "@type": "MessageCard",
