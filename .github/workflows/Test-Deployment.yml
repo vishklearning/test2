@@ -69,7 +69,7 @@ jobs:
             {
               "@type": "MessageCard",
               "@context": "Welcome To Teams Alert.",
-              "title": "No ${variables} avaliable in here"
+              "title": "Welcome"
             }
   deploy:
     needs: Build
