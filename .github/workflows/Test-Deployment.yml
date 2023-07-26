@@ -107,3 +107,18 @@ jobs:
       - name: Deployment - run all tests
         run: >
           sfdx force:source:deploy -p "force-app" --checkonly --testlevel RunLocalTests --json
+  TeamsNotificationPostDeployment:
+    needs: deploy
+    name: Teams Notification Post Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: success()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          dry_run: False
