@@ -114,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Microsoft Teams Notification
-      - uses: toko-bifrost/ms-teams-deploy-card@master
+        uses: toko-bifrost/ms-teams-deploy-card@master
         if: always()
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
