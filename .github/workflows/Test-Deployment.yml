@@ -54,6 +54,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
                    # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  TeamsNotification:
+    needs: Build
+    name: Teams Notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: always()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
   deploy:
     needs: Build
     runs-on: ubuntu-latest
