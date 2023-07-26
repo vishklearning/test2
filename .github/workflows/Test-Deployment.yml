@@ -68,7 +68,7 @@ jobs:
           raw: >-
             {
               "@type": "MessageCard",
-              "@context": "${workflow_link}",
+              "@context": "Welcome To Teams Alert.",
               "title": "No ${variables} avaliable in here"
             }
   deploy:
