@@ -18,6 +18,9 @@ jobs:
           node-version: "18"
       - name: Install SFDX CLI
         run: npm install sfdx-cli --global
+      # install SFDX Scanner
+      - name: Install SFDX-Scanner
+        run:  sfdx plugins:install @salesforce/sfdx-scanner	           
       # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
       - name: 'Installing sfdx git delta'
         run: | 
