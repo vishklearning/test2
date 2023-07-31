@@ -3,7 +3,7 @@ on:
   push:
     branches: [master1]
   pull_request:
-    branches: [main]
+    branches: [develop]
   workflow_dispatch:
 jobs: 
   Build:
@@ -43,7 +43,19 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with: 
           name: TempArtifact
-          path: force-app/
+          path: force-app/     
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Wait for approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ steps.generate_token.outputs.token }}
+          approvers: myteam
+          minimum-approvals: 1
   SonarScan:
     needs: Build
     name: SonarCloud    
