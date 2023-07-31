@@ -43,8 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with: 
           name: TempArtifact
-          path: force-app/
-      # pull request approval
+          path: force-app/     
       - name: Generate token
         id: generate_token
         uses: tibdex/github-app-token@v1
