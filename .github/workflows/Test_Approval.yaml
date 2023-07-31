@@ -44,15 +44,14 @@ jobs:
         with: 
           name: TempArtifact
           path: force-app/     
-  require_approval:
-      name: Require Approval to Merge
-      needs: Build
-      runs-on: ubuntu-latest
-      steps:
-      - name: Wait for approval
-        uses: "softprops/action-wait-for-approval@v2"
+      - name: Require Pull Request approvals
+  # You may pin to the exact commit or the version.
+  # uses: manuelmeister/require-approved-pull-request-action@902369d0610e0df39589eedcae3ab228d3a64a8d
+        uses: manuelmeister/require-approved-pull-request-action@0.0.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+              token : ${{ secrets.GIT_TOKEN }} # Token to authenticate with when connecting to Github        
+              # Minimum approvals
+              minimum_approvals: 2 # optional, default is 2
   SonarScan:
     needs: Build
     name: SonarCloud    
