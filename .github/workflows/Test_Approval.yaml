@@ -44,18 +44,11 @@ jobs:
         with: 
           name: TempArtifact
           path: force-app/     
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
+      - name: Require Pull Request approvals
+        uses: manuelmeister/require-approved-pull-request-action@0.0.1
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
-      - name: Wait for approval
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ steps.generate_token.outputs.token }}
-          approvers: myteam
-          minimum-approvals: 1
+              token : ${{ secrets.GIT_TOKEN }}
+              minimum_approvals: 2 # optional, default is 2
   SonarScan:
     needs: Build
     name: SonarCloud    
