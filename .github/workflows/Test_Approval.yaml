@@ -44,18 +44,15 @@ jobs:
         with: 
           name: TempArtifact
           path: force-app/     
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+  require_approval:
+      name: Require Approval to Merge
+      needs: Build
+      runs-on: ubuntu-latest
+      steps:
       - name: Wait for approval
-        uses: trstringer/manual-approval@v1
+        uses: "softprops/action-wait-for-approval@v2"
         with:
-          secret: ${{ steps.generate_token.outputs.token }}
-          approvers: myteam
-          minimum-approvals: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
   SonarScan:
     needs: Build
     name: SonarCloud    
