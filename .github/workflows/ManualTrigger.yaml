@@ -41,12 +41,12 @@ jobs:
       # Step 4: Merge metadata from Repository 1 into the Salesforce DX project
       - name: Merge Repository 1
         run: |
-          cp -R "/home/runner/work/test2/test2/force-app"/* force-app/
+          cp -R "/home/runner/work/test2/test2/force-app"/* force-app1/
 
       # Step 5: Merge metadata from Repository 2 into the Salesforce DX project
       - name: Merge Repository 2
         run: |
-          cp -R "vishklearning/Demo-SF-GH/tree/master/force-app"/* force-app/
+          cp -R "vishklearning/Demo-SF-GH/tree/master/force-app"/* force-app1/
 
       # Step 6: Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
