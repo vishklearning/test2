@@ -71,10 +71,14 @@ jobs:
 #             echo "::warning:: Failure in MergeDX: The srcToDeploy.zip is EMPTY(i.e. No New Code Changes Detected)"
 #             exit 1
 #           fi
-      
+      # Create Directory
+      - name: Create Directory
+        run: |
+          mkdir destforceapp
+          
       - name: Merge Repository 1
         run: |
-          cp -r ./force-app1  ./force-app2 ./forceapp
+          cp -r ./force-app1  ./force-app2 ./destforceapp
 
       # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
