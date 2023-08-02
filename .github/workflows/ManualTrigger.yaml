@@ -7,6 +7,10 @@ on:
         description: 'Source Branch Name'
         type: string
         required: true
+      sourcemainbranch:
+        description: 'Source Main Branch Name'
+        type: string
+        required: true
       tragetbranch:
         description: 'Target Branch Name'
         type: string
@@ -19,6 +23,7 @@ jobs:
     env:
       TARGET_ENVIRONMENT: ${{inputs.tragetbranch}}
       SOURCE_REPO: ${{inputs.sourcebranch}}
+      SOURCE_MAIN_REPO: ${{inputs.sourcemainbranch}}
    # if: env.TARGET_ENVIRONMENT == 'develop'
     steps:
       - name: Checkout
@@ -62,6 +67,14 @@ jobs:
           path: ./Demo-SF-GH-1
           ref: master
       # ${{ env.TARGET_REPO }}
+
+      - name: Checkout Repository 2
+        uses: actions/checkout@v2
+        with:
+          repository: vishklearning/Demo-SF-GH
+          path: ./Demo-SF-GH-2
+          ref: TestDemo
+      # ${{ env.SOURCE_MAIN_REPO }}
       
        # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
@@ -90,7 +103,7 @@ jobs:
         id: MergerDX
         continue-on-error: true
         run: |
-          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{env.SOURCE_REPO}} -t ${{env.TARGET_REPO}} -a ${{secrets.API_VERSION}}
+          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{env.SOURCE_MAIN_REPO}} -t ${{env.SOURCE_REPO}} -a ${{secrets.API_VERSION}}
           if [ $? -eq 0 ] && [ $(ls srcToDeploy | wc -l) -ne 0 ]; then
             echo "Success in MergeDX"
             zip -r srcToDeploy.zip ./srcToDeploy/
