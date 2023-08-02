@@ -72,7 +72,7 @@ jobs:
       - name: Generate Describe Log
         id: describe
         run: |
-          sf org list metadata-types --target-org vishksalesforce@gmail.com --output-file describe.log --api-version 57.0          
+          sf org list metadata-types --username vishksalesforce@gmail.com --output-file describe.log --api-version 57.0          
     
       # Upload the output to ./describe.log
       - uses: actions/upload-artifact@v3
