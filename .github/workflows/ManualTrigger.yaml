@@ -32,14 +32,14 @@ jobs:
         run: npm install sfdx-cli --global
         
       # install SFDX Scanner
-      - name: Install SFDX-Scanner
-        run:  sfdx plugins:install @salesforce/sfdx-scanner
+#       - name: Install SFDX-Scanner
+#         run:  sfdx plugins:install @salesforce/sfdx-scanner
       
-      - name: Checkout Python_Scripts
-        uses: actions/checkout@v3
-        with:
-          repository: vishklearning/Python_Scripts          
-          path: ./acct-scripts
+#       - name: Checkout Python_Scripts
+#         uses: actions/checkout@v3
+#         with:
+#           repository: vishklearning/Python_Scripts          
+#           path: ./acct-scripts
         
       # Checkout the first repository
       - name: Checkout Repository 1
