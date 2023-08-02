@@ -22,38 +22,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 2: Clone the first repository
-      - name: Clone Repository 1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install SFDX CLI
+        run: npm install sfdx-cli --global
+        
+      # install SFDX Scanner
+      - name: Install SFDX-Scanner
+        run:  sfdx plugins:install @salesforce/sfdx-scanner
+      
+      - name: Checkout Python_Scripts
+        uses: actions/checkout@v3
+        with:
+          repository: vishklearning/Python_Scripts          
+          path: ./acct-scripts
+        
+      # Checkout the first repository
+      - name: Checkout Repository 1
         uses: actions/checkout@v2
         with:
           repository: vishklearning/test2
-          path: ./force-app
+          path: ./force-app1
           ref: main
 
-      # Step 3: Clone the second repository
-      - name: Clone Repository 2
+      # Checkout the second repository
+      - name: Checkout Repository 2
         uses: actions/checkout@v2
         with:
           repository: vishklearning/Demo-SF-GH
-          path: ./force-app
+          path: ./force-app2
           ref: master
 
-      # Step 4: Merge metadata from Repository 1 into the Salesforce DX project
-      - name: Merge Repository 1
+     # Run the MergeDX
+      - name: MergerDX
+        id: MergerDX
+        continue-on-error: true
         run: |
-          cp -r "vishklearning/Demo-SF-GH/tree/master/force-app"/* "/home/runner/work/test2/test2/force-app/"
+          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{github.head_ref}} -t ${{github.base_ref}} -a ${{secrets.API_VERSION}}
+          if [ $? -eq 0 ] && [ $(ls srcToDeploy | wc -l) -ne 0 ]; then
+            echo "Success in MergeDX"
+            zip -r srcToDeploy.zip ./srcToDeploy/
+            git rev-parse --verify HEAD
+          else 
+            echo "::warning:: Failure in MergeDX: The srcToDeploy.zip is EMPTY(i.e. No New Code Changes Detected)"
+            exit 1
+          fi
 
-      # Step 5: Merge metadata from Repository 2 into the Salesforce DX project
-      - name: Merge Repository 2
-        run: |
-          cp -R "vishklearning/Demo-SF-GH/tree/master/force-app"/* force-app/
-
-      # Step 6: Authenticate to Salesforce using JWT-based authentication
+      # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
         run: |
           sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
 
-      # Step 7: Deploy the merged metadata to Salesforce
+      # Deploy the merged metadata to Salesforce
       - name: Deploy to Salesforce
         run: |
           sfdx force:source:deploy -p force-app -u huborg
