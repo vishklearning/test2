@@ -66,7 +66,7 @@ jobs:
        # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
         run: |
-          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
+          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -d -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
 
       # Generate Describe Log
       - name: Generate Describe Log
