@@ -72,7 +72,10 @@ jobs:
       - name: Generate Describe Log
         id: describe
         run: |
-          sf org list metadata-types -o vishksalesforce@gmail.com.dev1 --output-file describe.log --api-version 57.0          
+          describelog=$(cat ./describe.log)
+          echo "Vloicty Difference between source and target is:"
+          echo "$describelog"        
+      # sf org list metadata-types -o vishksalesforce@gmail.com.dev1 --output-file describe.log --api-version 57.0          
     
       # Upload the output to ./describe.log
       - uses: actions/upload-artifact@v3
