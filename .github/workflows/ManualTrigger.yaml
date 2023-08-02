@@ -1,0 +1,59 @@
+name: Manual Trigger Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment for deployment'
+        required: true
+        default: 'production'
+      repository1:
+        description: 'Global Repository'
+        required: true
+      repository2:
+        description: 'Regional Repository'
+        required: true
+      reference:
+        description: 'Version To Deploy Global REpository'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 2: Clone the first repository
+      - name: Clone Repository 1
+        uses: actions/checkout@v2
+        with:
+          repository: vishklearning/test2
+          path: repo1
+          ref: main
+
+      # Step 3: Clone the second repository
+      - name: Clone Repository 2
+        uses: actions/checkout@v2
+        with:
+          repository: vishklearning/Demo-SF-GH
+          path: repo2
+          ref: main
+
+      # Step 4: Merge metadata from Repository 1 into the Salesforce DX project
+      - name: Merge Repository 1
+        run: |
+          cp -R vishklearning/test2/tree/main/force-app/* force-app/
+
+      # Step 5: Merge metadata from Repository 2 into the Salesforce DX project
+      - name: Merge Repository 2
+        run: |
+          cp -R vishklearning/Demo-SF-GH/tree/master/force-app/* force-app/
+
+      # Step 6: Authenticate to Salesforce using JWT-based authentication
+      - name: Authenticate to Salesforce
+        run: |
+          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
+
+      # Step 7: Deploy the merged metadata to Salesforce
+      - name: Deploy to Salesforce
+        run: |
+          sfdx force:source:deploy -p force-app -u huborg
