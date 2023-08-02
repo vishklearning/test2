@@ -41,7 +41,7 @@ jobs:
       # Step 4: Merge metadata from Repository 1 into the Salesforce DX project
       - name: Merge Repository 1
         run: |
-          cp -R "vishklearning/test2/tree/main/force-app"/* force-app/
+          cp -R "/home/runner/work/test2/test2/force-app"/* force-app/
 
       # Step 5: Merge metadata from Repository 2 into the Salesforce DX project
       - name: Merge Repository 2
