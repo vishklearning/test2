@@ -35,18 +35,18 @@ jobs:
 #       - name: Install SFDX-Scanner
 #         run:  sfdx plugins:install @salesforce/sfdx-scanner
       
-#       - name: Checkout Python_Scripts
-#         uses: actions/checkout@v3
-#         with:
-#           repository: vishklearning/Python_Scripts          
-#           path: ./acct-scripts
+      - name: Checkout Python_Scripts
+        uses: actions/checkout@v3
+        with:
+          repository: vishklearning/Python_Scripts          
+          path: ./acct-scripts
         
       # Checkout the first repository
       - name: Checkout Repository 1
         uses: actions/checkout@v2
         with:
           repository: vishklearning/test2
-          path: ./force-app1
+          path: ./force-app
           ref: main
 
       # Checkout the second repository
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: vishklearning/Demo-SF-GH
-          path: ./force-app2
+          path: ./force-app
           ref: master
 
 #      # Run the MergeDX
@@ -76,12 +76,12 @@ jobs:
         run: |
           mkdir destforceapp
           
-      - name: Merge Repository 1
-        run: |
-          cp -r ./force-app1/*  ./force-app2/* ./destforceapp
-          ls destforceapp
-          ls force-app1
-          ls force-app2
+#       - name: Merge Repository 1
+#         run: |
+#           cp -r ./force-app1/*  ./force-app2/* ./destforceapp
+#           ls destforceapp
+#           ls force-app1
+#           ls force-app2
 
       # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
