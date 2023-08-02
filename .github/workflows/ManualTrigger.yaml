@@ -55,7 +55,26 @@ jobs:
           repository: vishklearning/Demo-SF-GH
           path: ./Demo-SF-GH-1
           ref: master
-      # ${{ env.TARGET_REPO }} 
+      # ${{ env.TARGET_REPO }}
+      
+       # Authenticate to Salesforce using JWT-based authentication
+      - name: Authenticate to Salesforce
+        run: |
+          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
+
+      # Generate Describe Log
+      - name: Generate Describe Log
+        id: describe
+        run: |
+          sf org list metadata-types --target-org ${{secrets.SFDXUSERNAME}} --output-file describe.log --api-version 57.0          
+    
+      # Upload the output to ./describe.log
+      - uses: actions/upload-artifact@v3
+        name: Artfifact Upload - ./describe.log
+        with:
+          name: describe.log
+          path: ./describe.log
+          retention-days: 1
         
      # Run the MergeDX
       - name: MergerDX
@@ -82,12 +101,7 @@ jobs:
 #           ls destforceapp
 #           ls force-app1
 #           ls force-app2
-
-      # Authenticate to Salesforce using JWT-based authentication
-      - name: Authenticate to Salesforce
-        run: |
-          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
-
+     
       # Deploy the merged metadata to Salesforce
       - name: Deploy to Salesforce
         run: |
