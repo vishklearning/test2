@@ -36,7 +36,7 @@ jobs:
         with:
           repository: vishklearning/Demo-SF-GH
           path: repo2
-          ref: main
+          ref: master
 
       # Step 4: Merge metadata from Repository 1 into the Salesforce DX project
       - name: Merge Repository 1
