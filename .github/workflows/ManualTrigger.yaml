@@ -79,7 +79,7 @@ jobs:
       - name: Merge Repository 1
         run: |
           cp -r ./force-app1  ./force-app2 ./destforceapp
-          echo ls ./destforceapp
+          ls destforceapp
 
       # Authenticate to Salesforce using JWT-based authentication
       - name: Authenticate to Salesforce
