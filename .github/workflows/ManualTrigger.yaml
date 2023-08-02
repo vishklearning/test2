@@ -78,7 +78,7 @@ jobs:
           
       - name: Merge Repository 1
         run: |
-          cp -r ./force-app1  ./force-app2 ./destforceapp
+          cp -r ./force-app1/*  ./force-app2/* ./destforceapp
           ls destforceapp
           ls force-app1
           ls force-app2
