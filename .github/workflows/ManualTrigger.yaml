@@ -83,7 +83,13 @@ jobs:
           repository: vishklearning/test2
           path: ./test2
           ref: develop
-      # ${{ env.TARGET_REPO }}      
+      # ${{ env.TARGET_REPO }}
+
+      # set user.name and user.email
+      - name: Set Username and UserEmail
+        run: |
+          git config --global user.name "Vishwanath"
+          git config --global user.email "vishklearning@email.com"
 
       # Run the MergeDX
       - name: MergerDX
