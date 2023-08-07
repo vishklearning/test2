@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v3
         name: Checkout Python_Scripts
         with:
-          repository: bayer-int/chcp-iqvia-oce-personal-github-actions
+          repository: vishklearning/test2
           token: ${{ secrets.V_METADATA_SEC }}
           path: ./acct-scripts
         
@@ -56,69 +56,23 @@ jobs:
       - name: Checkout Repository 1
         uses: actions/checkout@v2
         with:
-          repository: bayer-int/chcp-iqvia-oce-personal-middleeast
+          repository: vishklearning/Demo-SF-GH
           path: ./test2-1
-          ref: main
+          ref: master
       # ${{ env.SOURCE_REPO }}
       
       - name: Checkout Repository 2
         uses: actions/checkout@v2
         with:
-          repository: bayer-int/chcp-iqvia-oce-personal-middleeast
+          repository: vishklearning/test2
           path: ./test2
-          ref: feature/bayer-devops
+          ref: develop
       # ${{ env.TARGET_REPO }}
       
        # Authenticate SFDX Instance
-      - name: Authenticate SFDX Instance
-        id: sfdxAuthenticate
-        run: |
-          echo "Logging as ${{ secrets.SFDXUSERNAME }}"
-
-          echo "${{ secrets.SERVERKEY_SECUREFILEPATH}}" > server.key
-          authResponse=$(sfdx auth:jwt:grant --clientid "${{secrets.SFDXCONSUMERKEY}}" --jwtkeyfile=server.key --username "${{secrets.SFDXUSERNAME}}" --instanceurl "${{secrets.SFDX_INSTANCE_URL}}" --json)
-          statusCode=$(jq -r '.status' <<< $authResponse)
-
-          # echo $authResponse
-          echo $statusCode
-
-          if [[ "$statusCode" != "0" ]]; then
-            authenticationMessage=$(jq -r '.message' $authResponse)
-            echo "Error found: $authenticationMessage"
-            echo "$authenticationMessage"
-            exit 1
-          fi
-      # Generate Describe Log
-      - name: Generate Describe Log
-        id: describe
-        run: |
-          describelog=$(cat ./describe.log)
-          echo "Vloicty Difference between source and target is:"
-          echo "$describelog"        
-      # sf org list metadata-types -o vishksalesforce@gmail.com.dev1 --output-file describe.log --api-version 57.0          
-    
-      # Upload the output to ./describe.log
-      - uses: actions/upload-artifact@v3
-        name: Artfifact Upload - ./describe.log
-        with:
-          name: describe.log
-          path: ./describe.log
-          retention-days: 1
-        
-     # Run the MergeDX
-      - name: MergerDX
-        id: MergerDX
-        continue-on-error: true
-        run: |
-          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{env.TARGET_REPO}} -t ${{env.SOURCE_REPO}} -a ${{secrets.API_VERSION}}
-          if [ $? -eq 0 ] && [ $(ls srcToDeploy | wc -l) -ne 0 ]; then
-            echo "Success in MergeDX"
-            zip -r srcToDeploy.zip ./srcToDeploy/
-            git rev-parse --verify HEAD
-          else 
-            echo "::warning:: Failure in MergeDX: The srcToDeploy.zip is EMPTY(i.e. No New Code Changes Detected)"
-            exit 1
-          fi
+      - name: Authticate the URL
+        run: sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com
+           
 #       # Create Directory
 #       - name: Create Directory
 #         run: |
