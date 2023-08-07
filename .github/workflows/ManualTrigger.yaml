@@ -45,17 +45,18 @@ jobs:
 #       - name: Install SFDX-Scanner
 #         run:  sfdx plugins:install @salesforce/sfdx-scanner
       
-      - name: Checkout Python_Scripts
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        name: Checkout Python_Scripts
         with:
-          repository: vishklearning/Python_Scripts          
+          repository: bayer-int/chcp-iqvia-oce-personal-github-actions
+          token: ${{ secrets.V_METADATA_SEC }}
           path: ./acct-scripts
         
       # Checkout the first repository
       - name: Checkout Repository 1
         uses: actions/checkout@v2
         with:
-          repository: vishklearning/test2
+          repository: bayer-int/chcp-iqvia-oce-personal-middleeast
           path: ./test2-1
           ref: main
       # ${{ env.SOURCE_REPO }}
@@ -63,24 +64,30 @@ jobs:
       - name: Checkout Repository 2
         uses: actions/checkout@v2
         with:
-          repository: vishklearning/Demo-SF-GH
-          path: ./Demo-SF-GH-1
-          ref: master
+          repository: bayer-int/chcp-iqvia-oce-personal-middleeast
+          path: ./test2
+          ref: feature/bayer-devops
       # ${{ env.TARGET_REPO }}
-
-      - name: Checkout Repository 2
-        uses: actions/checkout@v2
-        with:
-          repository: vishklearning/Demo-SF-GH
-          path: ./Demo-SF-GH-2
-          ref: TestDemo
-      # ${{ env.SOURCE_MAIN_REPO }}
       
-       # Authenticate to Salesforce using JWT-based authentication
-      - name: Authenticate to Salesforce
+       # Authenticate SFDX Instance
+      - name: Authenticate SFDX Instance
+        id: sfdxAuthenticate
         run: |
-          sfdx auth:jwt:grant --username vishksalesforce@gmail.com.dev1 -d -f ./assests/server.key -i 3MVG9OjW2TAjFKUvMO.2ZqzAwK6pcsQgJU4Fj45jsD6_FWjV2uwH4cPcG0pOIkYxCxS0jl25186Se.tkjCcbW -r https://computing-efficiency-483.scratch.my.salesforce.com -a huborg
+          echo "Logging as ${{ secrets.SFDXUSERNAME }}"
 
+          echo "${{ secrets.SERVERKEY_SECUREFILEPATH}}" > server.key
+          authResponse=$(sfdx auth:jwt:grant --clientid "${{secrets.SFDXCONSUMERKEY}}" --jwtkeyfile=server.key --username "${{secrets.SFDXUSERNAME}}" --instanceurl "${{secrets.SFDX_INSTANCE_URL}}" --json)
+          statusCode=$(jq -r '.status' <<< $authResponse)
+
+          # echo $authResponse
+          echo $statusCode
+
+          if [[ "$statusCode" != "0" ]]; then
+            authenticationMessage=$(jq -r '.message' $authResponse)
+            echo "Error found: $authenticationMessage"
+            echo "$authenticationMessage"
+            exit 1
+          fi
       # Generate Describe Log
       - name: Generate Describe Log
         id: describe
@@ -103,7 +110,7 @@ jobs:
         id: MergerDX
         continue-on-error: true
         run: |
-          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{env.SOURCE_MAIN_REPO}} -t ${{env.SOURCE_REPO}} -a ${{secrets.API_VERSION}}
+          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{env.TARGET_REPO}} -t ${{env.SOURCE_REPO}} -a ${{secrets.API_VERSION}}
           if [ $? -eq 0 ] && [ $(ls srcToDeploy | wc -l) -ne 0 ]; then
             echo "Success in MergeDX"
             zip -r srcToDeploy.zip ./srcToDeploy/
