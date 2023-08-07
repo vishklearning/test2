@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
    # environment: develop
     env:
-      TARGET_ENVIRONMENT: ${{inputs.tragetbranch}}
-      SOURCE_REPO: ${{inputs.sourcebranch}}
+      TARGET_ENVIRONMENT: https://github.com/vishklearning/Demo-SF-GH/blob/master
+      SOURCE_REPO: https://github.com/vishklearning/test2/blob/main
       SOURCE_MAIN_REPO: ${{inputs.sourcemainbranch}}
    # if: env.TARGET_ENVIRONMENT == 'develop'
     steps:
@@ -73,7 +73,7 @@ jobs:
         id: MergerDX
         continue-on-error: true
         run: |
-          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{github.head_ref}} -t ${{github.base_ref}} -a ${{secrets.API_VERSION}}
+          python3 ./acct-scripts/mergerDX/merger.py merge_delta -s ${{ env.SOURCE_REPO }} -t ${{env.TARGET_ENVIRONMENT}} -a ${{secrets.API_VERSION}}
           if [ $? -eq 0 ] && [ $(ls srcToDeploy | wc -l) -ne 0 ]; then
             echo "Success in MergeDX"
             zip -r srcToDeploy.zip ./srcToDeploy/
