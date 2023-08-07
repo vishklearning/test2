@@ -82,11 +82,7 @@ jobs:
           repository: vishklearning/test2
           path: ./test2
           ref: develop
-      # ${{ env.TARGET_REPO }}
-
-      - name: install lxml
-        run: |
-          sudo pip install lxml
+      # ${{ env.TARGET_REPO }}      
 
       # Run the MergeDX
       - name: MergerDX
