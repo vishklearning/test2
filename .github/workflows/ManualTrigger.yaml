@@ -48,7 +48,8 @@ jobs:
       - uses: actions/checkout@v3
         name: Checkout Python_Scripts
         with:
-          repository: vishklearning/Python_Scripts          
+          repository: vishklearning/Python_Scripts 
+          token: ${{ secrets.V_METADATA_SEC }}
           path: ./acct-scripts
 
          # Setup python v3.7
