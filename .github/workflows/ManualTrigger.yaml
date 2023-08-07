@@ -68,6 +68,10 @@ jobs:
           ref: develop
       # ${{ env.TARGET_REPO }}
 
+      - name: install lxml
+        run: |
+          sudo pip install lxml
+
       # Run the MergeDX
       - name: MergerDX
         id: MergerDX
