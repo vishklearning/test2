@@ -80,7 +80,7 @@ jobs:
       - name: Checkout Repository 2
         uses: actions/checkout@v2
         with:
-          repository: vishklearning/test2
+          repository: vishklearning/Demo-SF-GH1
           path: ./test2
           ref: develop
       # ${{ env.TARGET_REPO }}
