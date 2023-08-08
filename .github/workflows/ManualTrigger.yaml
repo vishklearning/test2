@@ -73,6 +73,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: vishklearning/Demo-SF-GH
+          token: ${{ secrets.V_METADATA_SEC }}
           path: ./test2-1
           ref: master
       # ${{ env.SOURCE_REPO }}
@@ -81,6 +82,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: vishklearning/Demo-SF-GH1
+          token: ${{ secrets.V_METADATA_SEC }}
           path: ./test2
           ref: master
       # ${{ env.TARGET_REPO }}
