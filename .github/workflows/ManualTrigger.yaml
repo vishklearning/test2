@@ -82,7 +82,7 @@ jobs:
         with:
           repository: vishklearning/Demo-SF-GH1
           path: ./test2
-          ref: develop
+          ref: master
       # ${{ env.TARGET_REPO }}
 
       # set user.name and user.email
